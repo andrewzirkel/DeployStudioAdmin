@@ -1,22 +1,12 @@
 #!/bin/sh
 
 SCRIPT_NAME=`basename "${0}"`
-VERSION=1.2.1
+VERSION=1.2
 
 if [ ${#} -lt 1 ]
 then
   echo "Usage: ${SCRIPT_NAME} <disk image path> [--reconvertbeforescanning]"
   echo "Example: ${SCRIPT_NAME} /tmp/diskimage.dmg --reconvertbeforescanning"
-  exit 1
-fi
-
-#run apfs helper, which adds in the preboot and recovery image
-SCRIPTDIR=`dirname "${0}"`
-echo "Runnning apfsHelper on ${1}"
-"$SCRIPTDIR/apfsHelper.sh" "${1}"
-if [ $? -gt 0 ]; then
-  echo "${SCRIPT_NAME}: apfsHelper.sh failed"
-  echo "RuntimeAbortScript"
   exit 1
 fi
 
