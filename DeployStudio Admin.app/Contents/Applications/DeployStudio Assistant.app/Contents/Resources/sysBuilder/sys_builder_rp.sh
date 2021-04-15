@@ -733,5 +733,6 @@ then
 fi
 
 echo "Exiting ${SCRIPT_NAME} v${VERSION} ("`date`")"
-
+echo "Printing ENV"
+echo `env`
 exit 0

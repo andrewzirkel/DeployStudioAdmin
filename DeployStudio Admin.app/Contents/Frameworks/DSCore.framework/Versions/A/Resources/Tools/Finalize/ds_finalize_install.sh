@@ -3,7 +3,7 @@
 SCRIPT_NAME=`basename "${0}"`
 SCRIPT_PATH=`dirname "${0}"`
 
-echo "${SCRIPT_NAME} - v1.20 ("`date`")"
+echo "${SCRIPT_NAME} - v1.21 ("`date`")"
 
 if [ ${#} -ne 1 ]
 then
@@ -62,23 +62,23 @@ rm -f "${VOLUME_PATH}"/var/db/dyld/dyld* 2>/dev/null
 if [ ! -e "${VOLUME_PATH}/Library" ]
 then
   mkdir "${VOLUME_PATH}"/Library
+  chmod 755 "${VOLUME_PATH}"/Library
+  chown root:wheel "${VOLUME_PATH}"/Library
 fi
-chmod 755 "${VOLUME_PATH}"/Library
-chown root:wheel "${VOLUME_PATH}"/Library
 
 if [ ! -e "${VOLUME_PATH}/Library/LaunchDaemons" ]
 then
   mkdir "${VOLUME_PATH}"/Library/LaunchDaemons
+  chmod 755 "${VOLUME_PATH}"/Library/LaunchDaemons
+  chown root:wheel "${VOLUME_PATH}"/Library/LaunchDaemons
 fi
-chmod 755 "${VOLUME_PATH}"/Library/LaunchDaemons
-chown root:wheel "${VOLUME_PATH}"/Library/LaunchDaemons
 
 if [ ! -e "${VOLUME_PATH}/Library/LaunchAgents" ]
 then
   mkdir "${VOLUME_PATH}"/Library/LaunchAgents
+  chmod 755 "${VOLUME_PATH}"/Library/LaunchAgents
+  chown root:wheel "${VOLUME_PATH}"/Library/LaunchAgents
 fi
-chmod 755 "${VOLUME_PATH}"/Library/LaunchAgents
-chown root:wheel "${VOLUME_PATH}"/Library/LaunchAgents
 
 if [ ! -e "${VOLUME_PATH}/etc/deploystudio/bin" ]
 then

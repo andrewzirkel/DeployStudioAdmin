@@ -3,7 +3,7 @@
 SCRIPT_NAME=`basename "${0}"`
 SCRIPT_PATH=`dirname "${0}"`
 
-/bin/echo "${SCRIPT_NAME} - v1.37 ("`date`")"
+/bin/echo "${SCRIPT_NAME} - v1.38 ("`date`")"
 
 custom_logger() {
   /bin/echo "${SCRIPT_NAME} - $1"
@@ -224,8 +224,10 @@ then
       if [ ! -d "${USER_HOME}"/Library/Preferences ]
       then
         mkdir -p "${USER_HOME}"/Library/Preferences
-        chown "${USER_UID}" "${USER_HOME}"/Library
-        chown "${USER_UID}" "${USER_HOME}"/Library/Preferences
+        chown "${USER_UID}:staff" "${USER_HOME}"/Library
+        chown "${USER_UID}:staff" "${USER_HOME}"/Library/Preferences
+        chmod 700 "${USER_HOME}"/Library
+        chmod 700 "${USER_HOME}"/Library/Preferences
       fi
       if [ -d "${USER_HOME}"/Library/Preferences ]
       then
@@ -233,7 +235,7 @@ then
         defaults write "${USER_HOME}"/Library/Preferences/com.apple.SetupAssistant DidSeeSiriSetup -bool TRUE
         defaults write "${USER_HOME}"/Library/Preferences/com.apple.SetupAssistant GestureMovieSeen none
         defaults write "${USER_HOME}"/Library/Preferences/com.apple.SetupAssistant LastSeenCloudProductVersion "${SYS_VERS}"
-        chown "${USER_UID}" "${USER_HOME}"/Library/Preferences/com.apple.SetupAssistant.plist
+        chown "${USER_UID}:staff" "${USER_HOME}"/Library/Preferences/com.apple.SetupAssistant.plist
       fi
     fi
   done
