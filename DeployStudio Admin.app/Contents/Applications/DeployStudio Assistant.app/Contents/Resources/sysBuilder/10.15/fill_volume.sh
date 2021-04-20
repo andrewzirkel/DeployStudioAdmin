@@ -69,6 +69,13 @@ add_files_at_path "${SYS_LIB_CORE}" /System/Library/CoreServices
 #1030#chown root:wheel "${TMP_MOUNT_PATH}"/Library/Preferences/com.apple.systemuiserver.plist
 #1030#rm -rf "${TMP_MOUNT_PATH}/System/Library/CoreServices/Menu Extras/AirPort.menu"
 
+#The utilties have moved, so copy them:
+ditto --rsrc "${TMP_MOUNT_PATH}/System/Applications/Utilities/" "${TMP_MOUNT_PATH}/Applications/Utilities"
+
+#More frameworks in new location (what was wrong with the old one?)
+LIB_APL_SYS_LIB_FRK="SafariServices"
+add_files_at_path "${LIB_APL_SYS_LIB_FRK}" /Library/Apple/System/Library/Frameworks .framework
+
 SYS_LIB_EXT="IOStorageFamily"
 #add_files_at_path "${SYS_LIB_EXT}" /System/Library/Extensions .kext
 

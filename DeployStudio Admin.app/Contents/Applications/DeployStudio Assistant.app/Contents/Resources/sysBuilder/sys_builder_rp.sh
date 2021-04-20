@@ -451,6 +451,18 @@ then
   BASE_SYSTEM_ROOT_PATH=""
 else
   BASE_SYSTEM_ROOT_PATH="/Volumes/${BASE_SYSTEM}"
+  #check if we are 10.15
+  APFSContainer=`diskutil info "${BASE_SYSTEM_ROOT_PATH}" | grep "APFS Container" | tr -s " " | cut -d " " -f4`
+  if [ ! -z $APFSContainer ]; then
+    #find data partition:
+    DataPartNum=`diskutil list /dev/$APFSContainer | grep "\- Data" | cut -d : -f 1 | tr -d " "`
+    if [ ! -z $DataPartNum ]; then
+      DataPartDev="/dev/${APFSContainer}s${DataPartNum}"
+      echo "mounting Data Partition ${DataPartDev} at ${BASE_SYSTEM_ROOT_PATH}/System/Volumes/Data"
+      diskutil unmount ${DataPartDev}
+      diskutil mount -mountPoint "${BASE_SYSTEM_ROOT_PATH}/System/Volumes/Data" ${DataPartDev}
+    fi
+  fi
 fi
 
 HOST_UUID=`ioreg -rd1 -c IOPlatformExpertDevice | awk -F= '/(UUID)/ { gsub("[ \"]", ""); print $2 }'`
@@ -658,7 +670,15 @@ then
 
   bless --folder "${TMP_MOUNT_PATH}"/System/Library/CoreServices --label "${VOL_NAME}" --verbose
 else
-  ditto --rsrc "${SYS_VERS_FOLDER}/NBImageInfo.plist" "${NBI_FOLDER}/NBImageInfo.plist"
+  #ditto --rsrc "${SYS_VERS_FOLDER}/NBImageInfo.plist" "${NBI_FOLDER}/NBImageInfo.plist"
+  defaults write "${NBI_FOLDER}/NBImageInfo" BackwardCompatible -bool false
+  defaults write "${NBI_FOLDER}/NBImageInfo" BootFile booter
+  defaults write "${NBI_FOLDER}/NBImageInfo" IsDefault -bool false
+  defaults write "${NBI_FOLDER}/NBImageInfo" IsEnabled -bool true
+  defaults write "${NBI_FOLDER}/NBImageInfo" IsInstall -bool true
+  defaults write "${NBI_FOLDER}/NBImageInfo" Kind -integer 2
+  defaults write "${NBI_FOLDER}/NBImageInfo" RootPath NetInstall.dmg
+  defaults write "${NBI_FOLDER}/NBImageInfo" SupportsDiskless -bool false
   defaults write "${NBI_FOLDER}/NBImageInfo" Architectures -array ${ARCH}
   defaults write "${NBI_FOLDER}/NBImageInfo" DisabledSystemIdentifiers -array
   defaults write "${NBI_FOLDER}/NBImageInfo" EnabledSystemIdentifiers -array

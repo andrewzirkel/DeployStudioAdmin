@@ -20,6 +20,20 @@ then
   exit 1
 fi
 
+#This is the first script to run after DSRestoreTask lays down the image, 
+#so if we are 10.15 then we must mount the Data Partition and here seems a googe place.
+#check if we are 10.15
+APFSContainer=`diskutil info "${1}" | grep "APFS Container" | tr -s " " | cut -d " " -f4`
+if [ ! -z $APFSContainer ]; then
+  #find data partition:
+  DataPartNum=`diskutil list /dev/$APFSContainer | grep "\- Data" | cut -d : -f 1 | tr -d " "`
+  if [ ! -z $DataPartNum ]; then
+    DataPartDev="/dev/${APFSContainer}s${DataPartNum}"
+    echo "mounting Data Partition ${DataPartDev} at ${1}/System/Volumes/Data"
+    diskutil mount -mountPoint "${1}/System/Volumes/Data" ${DataPartDev}
+  fi
+fi
+
 rm -f  "${1}"/Library/LaunchAgents/com.deploystudio.FinalizeApp.plist 2>/dev/null
 rm -f  "${1}"/Library/LaunchAgents/com.deploystudio.finalizeCleanup.plist 2>/dev/null
 rm -f  "${1}"/Library/LaunchAgents/com.deploystudio.finalizeScript.plist 2>/dev/null
