@@ -11,6 +11,11 @@ if [[ "${1}" != *"apfs"* ]]; then
   exit 0
 fi
 
+if [[ "${1}" = *"container.apfs.dmg" ]]; then
+  echo "$SCRIPT_NAME: ${1} is an apfs container, no processing needed."
+  exit 0
+fi
+
 DMGPREFIX=`basename -s .i386.apfs.dmg "${1}"`
 
 #Convert image to rw

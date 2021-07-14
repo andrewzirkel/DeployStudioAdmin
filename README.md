@@ -11,5 +11,5 @@ Adds:
 * Use Assistant from [DeployStudio 1.7.11.1](https://github.com/andrewzirkel/DeployStudioAdmin/archive/master.zip).
 
 ### Process for creating a 10.15 Master
-* Use diskutility to create the master from the container that contains the Root and Data partitions.
+* Use "Create Master from a Volume" default workflow and in the Disk Image plugin choose the apfs synthesized container as the source, likely disk1.
 

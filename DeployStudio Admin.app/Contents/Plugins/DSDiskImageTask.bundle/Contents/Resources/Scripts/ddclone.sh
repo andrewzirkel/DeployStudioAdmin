@@ -76,6 +76,24 @@ else
   IMAGE_FILE_PATH="${TARGET_FILE_PATH}"
 fi
 
+echo "Checking if ${DEVICE} is an afps container..."
+diskutil list ${DEVICE} | grep "0:      APFS Container Scheme" 2>/dev/null
+if [ $? -gt 0 ]; then
+  echo "${DEVICE} is not an apfs container, Continuing"
+else
+  #run containerclone
+  SCRIPTDIR=`dirname "${0}"`
+  echo "Runnning containerclone.sh on ${1}"
+  DESTINATION=`echo "${TARGET_FILE_PATH}" | sed 's/disk./container.apfs.dmg/'`
+  "$SCRIPTDIR/containerclone.sh" "${1}" "${DESTINATION}"
+  if [ $? -gt 0 ]; then
+    echo "${SCRIPT_NAME}: containerclone.sh failed"
+    echo "RuntimeAbortScript"
+    exit 1
+  fi
+  exit 0
+fi
+
 # unmount device
 echo "Unmounting device ${DEVICE}s${PARTITION_ID}..."
 diskutil unmount force "${DEVICE}s${PARTITION_ID}" 2>/dev/null
